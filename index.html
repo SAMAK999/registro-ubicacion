@@ -34,6 +34,7 @@
       box-shadow:0 12px 40px rgba(17,24,39,.08);
     }
     h1{margin:0 0 8px; font-size:30px;}
+    .sub{margin:0 0 22px; color:#475569; line-height:1.45;}
     .grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
     .full{grid-column:1 / -1}
     label{display:block; font-size:14px; font-weight:700; margin-bottom:8px;}
@@ -96,7 +97,8 @@
   <div class="wrap">
     <div class="card">
       <h1>Registro de ubicación</h1>
-      
+      <p class="sub">Captura la ubicación actual, valida el domicilio detectado y guarda el registro en Google Sheets.</p>
+
       <form id="geoForm">
         <div class="grid">
           <div class="full">
@@ -106,7 +108,7 @@
           </div>
 
           <div class="full">
-            <label for="referencia"># Logos</label>
+            <label for="referencia">Referencia adicional</label>
             <input id="referencia" name="referencia" type="text" placeholder="Ejemplo: frente a parque, portón azul, casa esquina" />
           </div>
 
@@ -146,7 +148,7 @@
   </div>
 
   <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzyqlcTT3hqKlxqYuYv-TgivaFm2Ys0Q-n7aksOr145O-VdX_GOkC5Z8yNEedbL-gb_/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKjipbc58UR1MYlKftu2QnqDTDKnL0Rwey2mmmXCp_cIFgt-jiMnA6Ks8qPOvzC01Q/exec';
 
     const statusBox = document.getElementById('status');
     const mapsLink = document.getElementById('mapsLink');
