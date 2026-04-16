@@ -1,1 +1,1 @@
-# Punto 
+aqui se captura lo solicitado.
