@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de ubicación</title>
+  <style>
+    :root{
+      --bg:#f4f6fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --line:#dbe2ea;
+      --primary:#2563eb;
+      --primary-2:#1d4ed8;
+      --ok:#0f9d58;
+      --warn:#b45309;
+      --err:#b91c1c;
+      --muted:#64748b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#eef2ff 0%, var(--bg) 100%);
+      color:var(--text);
+      padding:24px;
+    }
+    .wrap{max-width:860px; margin:0 auto;}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:24px;
+      box-shadow:0 12px 40px rgba(17,24,39,.08);
+    }
+    h1{margin:0 0 8px; font-size:30px;}
+    .sub{margin:0 0 22px; color:#475569; line-height:1.45;}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+    .full{grid-column:1 / -1}
+    label{display:block; font-size:14px; font-weight:700; margin-bottom:8px;}
+    .req{color:#dc2626}
+    .hint{display:block; margin-top:6px; color:var(--muted); font-size:12px; line-height:1.35;}
+    input{
+      width:100%;
+      border:1px solid #cfd8e3;
+      background:#fff;
+      border-radius:12px;
+      padding:13px 14px;
+      font-size:15px;
+      color:var(--text);
+      outline:none;
+    }
+    input:focus{
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(37,99,235,.12);
+    }
+    .readonly{background:#f8fafc}
+    .actions{display:flex; flex-wrap:wrap; gap:12px; margin-top:18px;}
+    button{
+      border:none;
+      border-radius:12px;
+      padding:13px 16px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .btn-primary{background:var(--primary); color:#fff}
+    .btn-primary:hover{background:var(--primary-2)}
+    .btn-secondary{background:#eef2ff; color:#1e40af}
+    .btn-secondary:disabled, .btn-primary:disabled{opacity:.7; cursor:not-allowed}
+    .status{
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:12px;
+      font-size:14px;
+      display:none;
+      border:1px solid var(--line);
+      line-height:1.45;
+    }
+    .status.ok{display:block; color:var(--ok); background:#f0fdf4; border-color:#bbf7d0;}
+    .status.warn{display:block; color:var(--warn); background:#fffbeb; border-color:#fde68a;}
+    .status.err{display:block; color:var(--err); background:#fef2f2; border-color:#fecaca;}
+    .extra-links{display:flex; flex-wrap:wrap; gap:12px; margin-top:12px;}
+    .maps-link, .records-link{
+      display:none;
+      font-size:14px;
+      text-decoration:none;
+      color:#1d4ed8;
+      font-weight:700;
+    }
+    @media (max-width:720px){
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Registro de ubicación</h1>
+      <p class="sub">Captura la ubicación actual, valida el domicilio detectado y guarda el registro en Google Sheets.</p>
+
+      <form id="geoForm">
+        <div class="grid">
+          <div class="full">
+            <label for="ubicacion">Domicilio detectado <span class="req">*</span></label>
+            <input id="ubicacion" name="ubicacion" type="text" placeholder="Se llenará con el domicilio detectado" required />
+            <span class="hint">Puedes corregir el texto si el servicio no devuelve la dirección exacta.</span>
+          </div>
+
+          <div class="full">
+            <label for="referencia">Referencia adicional</label>
+            <input id="referencia" name="referencia" type="text" placeholder="Ejemplo: frente a parque, portón azul, casa esquina" />
+          </div>
+
+          <div>
+            <label for="latitud">Latitud <span class="req">*</span></label>
+            <input id="latitud" name="latitud" class="readonly" type="text" readonly required />
+          </div>
+
+          <div>
+            <label for="longitud">Longitud <span class="req">*</span></label>
+            <input id="longitud" name="longitud" class="readonly" type="text" readonly required />
+          </div>
+
+          <div>
+            <label for="precision">Precisión estimada (m)</label>
+            <input id="precision" name="precision" class="readonly" type="text" readonly />
+          </div>
+
+          <div>
+            <label for="fechaHora">Fecha y hora</label>
+            <input id="fechaHora" name="fechaHora" class="readonly" type="text" readonly />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn-primary" id="btnUbicacion">Capturar ubicación</button>
+          <button type="submit" class="btn-secondary" id="btnGuardar">Guardar registro</button>
+        </div>
+      </form>
+
+      <div id="status" class="status"></div>
+
+      <div class="extra-links">
+        <a id="mapsLink" class="maps-link" href="#" target="_blank" rel="noopener noreferrer">Abrir punto en Google Maps</a>
+        <a id="recordsLink" class="records-link" href="https://docs.google.com/spreadsheets/d/1tMPd5xaeBH75uPwXIJa8UO1uZaaoqk1ByfDzs1rIcqU/edit?usp=sharing" target="_blank" rel="noopener noreferrer">Ver registros capturados</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzyqlcTT3hqKlxqYuYv-TgivaFm2Ys0Q-n7aksOr145O-VdX_GOkC5Z8yNEedbL-gb_/exec';
+    const REGISTROS_URL = 'https://docs.google.com/spreadsheets/d/1tMPd5xaeBH75uPwXIJa8UO1uZaaoqk1ByfDzs1rIcqU/edit?usp=sharing';
+
+    const statusBox = document.getElementById('status');
+    const mapsLink = document.getElementById('mapsLink');
+    const recordsLink = document.getElementById('recordsLink');
+    const fechaHora = document.getElementById('fechaHora');
+    const form = document.getElementById('geoForm');
+    const btnUbicacion = document.getElementById('btnUbicacion');
+    const btnGuardar = document.getElementById('btnGuardar');
+    const ubicacion = document.getElementById('ubicacion');
+    const latitud = document.getElementById('latitud');
+    const longitud = document.getElementById('longitud');
+    const precision = document.getElementById('precision');
+    const referencia = document.getElementById('referencia');
+
+    function setStatus(texto, tipo='ok') {
+      statusBox.textContent = texto;
+      statusBox.className = 'status ' + tipo;
+    }
+
+    function nowText() {
+      return new Date().toLocaleString('es-MX', {
+        year:'numeric', month:'2-digit', day:'2-digit',
+        hour:'2-digit', minute:'2-digit', second:'2-digit'
+      });
+    }
+
+    function setLoading(isLoading) {
+      btnUbicacion.disabled = isLoading;
+      btnGuardar.disabled = isLoading;
+    }
+
+    function initRecordsLink() {
+      if (REGISTROS_URL) {
+        recordsLink.href = REGISTROS_URL;
+        recordsLink.style.display = 'inline-block';
+      }
+    }
+
+    fechaHora.value = nowText();
+    initRecordsLink();
+
+    async function reverseGeocode(lat, lng) {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&zoom=18&addressdetails=1`;
+      const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      if (!response.ok) throw new Error('No fue posible consultar el servicio de domicilio.');
+      const data = await response.json();
+      return data.display_name || '';
+    }
+
+    btnUbicacion.addEventListener('click', () => {
+      fechaHora.value = nowText();
+      statusBox.className = 'status';
+      statusBox.textContent = '';
+
+      if (!navigator.geolocation) {
+        setStatus('Este navegador no soporta geolocalización.', 'err');
+        return;
+      }
+
+      setStatus('Obteniendo geoposición...', 'warn');
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const lat = position.coords.latitude.toFixed(6);
+            const lng = position.coords.longitude.toFixed(6);
+            const acc = Math.round(position.coords.accuracy || 0);
+
+            latitud.value = lat;
+            longitud.value = lng;
+            precision.value = acc ? `${acc} m` : '';
+
+            mapsLink.href = `https://www.google.com/maps?q=${lat},${lng}`;
+            mapsLink.style.display = 'inline-block';
+
+            setStatus('Geoposición capturada. Consultando domicilio aproximado...', 'warn');
+
+            const domicilio = await reverseGeocode(lat, lng);
+            if (domicilio) {
+              ubicacion.value = domicilio;
+              setStatus('Ubicación detectada correctamente. Revisa el domicilio antes de guardar.', 'ok');
+            } else {
+              setStatus('Se obtuvo la geoposición, pero no se pudo construir una dirección visible.', 'warn');
+            }
+          } catch (error) {
+            setStatus('Se obtuvo la geoposición, pero no fue posible traer el domicilio. Aun así puedes guardar las coordenadas.', 'warn');
+          }
+        },
+        (error) => {
+          const messages = {
+            1: 'Permiso de ubicación denegado por el usuario.',
+            2: 'No se pudo determinar la ubicación del dispositivo.',
+            3: 'La solicitud de ubicación tardó demasiado.'
+          };
+          setStatus(messages[error.code] || 'Ocurrió un error al obtener la ubicación.', 'err');
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 12000,
+          maximumAge: 0
+        }
+      );
+    });
+
+    async function enviarRegistro(data) {
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('PEGA_AQUI')) {
+        throw new Error('Falta configurar la URL de Apps Script en el HTML.');
+      }
+
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
+      });
+
+      const raw = await response.text();
+      let result = {};
+      try {
+        result = JSON.parse(raw);
+      } catch (e) {
+        result = { ok: false, message: 'Respuesta no válida del servidor.' };
+      }
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.message || 'No fue posible guardar el registro.');
+      }
+
+      return result;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        ubicacion: ubicacion.value.trim(),
+        referencia: referencia.value.trim(),
+        latitud: latitud.value.trim(),
+        longitud: longitud.value.trim(),
+        precision: precision.value.trim(),
+        fechaHora: fechaHora.value.trim(),
+        googleMaps: latitud.value && longitud.value ? `https://www.google.com/maps?q=${latitud.value},${longitud.value}` : '',
+        capturadoDesde: navigator.userAgent
+      };
+
+      if (!data.ubicacion || !data.latitud || !data.longitud) {
+        setStatus('Falta domicilio o capturar la geoposición.', 'err');
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setStatus('Guardando registro...', 'warn');
+        const result = await enviarRegistro(data);
+        setStatus(result.message || 'Registro guardado correctamente.', 'ok');
+        fechaHora.value = nowText();
+      } catch (error) {
+        setStatus(error.message || 'No fue posible guardar el registro.', 'err');
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
