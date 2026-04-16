@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro de ubicación</title>
+  <title>Registro de ubicaciÃ³n</title>
   <style>
     :root{
       --bg:#f4f6fb;
@@ -81,7 +81,7 @@
     .status.warn{display:block; color:var(--warn); background:#fffbeb; border-color:#fde68a;}
     .status.err{display:block; color:var(--err); background:#fef2f2; border-color:#fecaca;}
     .extra-links{display:flex; flex-wrap:wrap; gap:12px; margin-top:12px;}
-    .maps-link, .records-link{
+    .maps-link{
       display:none;
       font-size:14px;
       text-decoration:none;
@@ -96,20 +96,20 @@
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>Registro de ubicación</h1>
-      <p class="sub">Captura la ubicación actual, valida el domicilio detectado y guarda el registro en Google Sheets.</p>
+      <h1>Registro de ubicaciÃ³n</h1>
+      <p class="sub">Captura la ubicaciÃ³n actual, valida el domicilio detectado y guarda el registro en Google Sheets.</p>
 
       <form id="geoForm">
         <div class="grid">
           <div class="full">
             <label for="ubicacion">Domicilio detectado <span class="req">*</span></label>
-            <input id="ubicacion" name="ubicacion" type="text" placeholder="Se llenará con el domicilio detectado" required />
-            <span class="hint">Puedes corregir el texto si el servicio no devuelve la dirección exacta.</span>
+            <input id="ubicacion" name="ubicacion" type="text" placeholder="Se llenarÃ¡ con el domicilio detectado" required />
+            <span class="hint">Puedes corregir el texto si el servicio no devuelve la direcciÃ³n exacta.</span>
           </div>
 
           <div class="full">
             <label for="referencia">Referencia adicional</label>
-            <input id="referencia" name="referencia" type="text" placeholder="Ejemplo: frente a parque, portón azul, casa esquina" />
+            <input id="referencia" name="referencia" type="text" placeholder="Ejemplo: frente a parque, portÃ³n azul, casa esquina" />
           </div>
 
           <div>
@@ -123,7 +123,7 @@
           </div>
 
           <div>
-            <label for="precision">Precisión estimada (m)</label>
+            <label for="precision">PrecisiÃ³n estimada (m)</label>
             <input id="precision" name="precision" class="readonly" type="text" readonly />
           </div>
 
@@ -134,7 +134,7 @@
         </div>
 
         <div class="actions">
-          <button type="button" class="btn-primary" id="btnUbicacion">Capturar ubicación</button>
+          <button type="button" class="btn-primary" id="btnUbicacion">Capturar ubicaciÃ³n</button>
           <button type="submit" class="btn-secondary" id="btnGuardar">Guardar registro</button>
         </div>
       </form>
@@ -143,7 +143,6 @@
 
       <div class="extra-links">
         <a id="mapsLink" class="maps-link" href="#" target="_blank" rel="noopener noreferrer">Abrir punto en Google Maps</a>
-        <a id="recordsLink" class="records-link" href="https://docs.google.com/spreadsheets/d/1tMPd5xaeBH75uPwXIJa8UO1uZaaoqk1ByfDzs1rIcqU/edit?usp=sharing" target="_blank" rel="noopener noreferrer">Ver registros capturados</a>
       </div>
     </div>
   </div>
@@ -154,7 +153,6 @@
 
     const statusBox = document.getElementById('status');
     const mapsLink = document.getElementById('mapsLink');
-    const recordsLink = document.getElementById('recordsLink');
     const fechaHora = document.getElementById('fechaHora');
     const form = document.getElementById('geoForm');
     const btnUbicacion = document.getElementById('btnUbicacion');
@@ -182,15 +180,8 @@
       btnGuardar.disabled = isLoading;
     }
 
-    function initRecordsLink() {
-      if (REGISTROS_URL) {
-        recordsLink.href = REGISTROS_URL;
-        recordsLink.style.display = 'inline-block';
-      }
-    }
 
     fechaHora.value = nowText();
-    initRecordsLink();
 
     async function reverseGeocode(lat, lng) {
       const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&zoom=18&addressdetails=1`;
@@ -206,11 +197,11 @@
       statusBox.textContent = '';
 
       if (!navigator.geolocation) {
-        setStatus('Este navegador no soporta geolocalización.', 'err');
+        setStatus('Este navegador no soporta geolocalizaciÃ³n.', 'err');
         return;
       }
 
-      setStatus('Obteniendo geoposición...', 'warn');
+      setStatus('Obteniendo geoposiciÃ³n...', 'warn');
 
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -226,26 +217,26 @@
             mapsLink.href = `https://www.google.com/maps?q=${lat},${lng}`;
             mapsLink.style.display = 'inline-block';
 
-            setStatus('Geoposición capturada. Consultando domicilio aproximado...', 'warn');
+            setStatus('GeoposiciÃ³n capturada. Consultando domicilio aproximado...', 'warn');
 
             const domicilio = await reverseGeocode(lat, lng);
             if (domicilio) {
               ubicacion.value = domicilio;
-              setStatus('Ubicación detectada correctamente. Revisa el domicilio antes de guardar.', 'ok');
+              setStatus('UbicaciÃ³n detectada correctamente. Revisa el domicilio antes de guardar.', 'ok');
             } else {
-              setStatus('Se obtuvo la geoposición, pero no se pudo construir una dirección visible.', 'warn');
+              setStatus('Se obtuvo la geoposiciÃ³n, pero no se pudo construir una direcciÃ³n visible.', 'warn');
             }
           } catch (error) {
-            setStatus('Se obtuvo la geoposición, pero no fue posible traer el domicilio. Aun así puedes guardar las coordenadas.', 'warn');
+            setStatus('Se obtuvo la geoposiciÃ³n, pero no fue posible traer el domicilio. Aun asÃ­ puedes guardar las coordenadas.', 'warn');
           }
         },
         (error) => {
           const messages = {
-            1: 'Permiso de ubicación denegado por el usuario.',
-            2: 'No se pudo determinar la ubicación del dispositivo.',
-            3: 'La solicitud de ubicación tardó demasiado.'
+            1: 'Permiso de ubicaciÃ³n denegado por el usuario.',
+            2: 'No se pudo determinar la ubicaciÃ³n del dispositivo.',
+            3: 'La solicitud de ubicaciÃ³n tardÃ³ demasiado.'
           };
-          setStatus(messages[error.code] || 'Ocurrió un error al obtener la ubicación.', 'err');
+          setStatus(messages[error.code] || 'OcurriÃ³ un error al obtener la ubicaciÃ³n.', 'err');
         },
         {
           enableHighAccuracy: true,
@@ -272,7 +263,7 @@
       try {
         result = JSON.parse(raw);
       } catch (e) {
-        result = { ok: false, message: 'Respuesta no válida del servidor.' };
+        result = { ok: false, message: 'Respuesta no vÃ¡lida del servidor.' };
       }
 
       if (!response.ok || !result.ok) {
@@ -297,7 +288,7 @@
       };
 
       if (!data.ubicacion || !data.latitud || !data.longitud) {
-        setStatus('Falta domicilio o capturar la geoposición.', 'err');
+        setStatus('Falta domicilio o capturar la geoposiciÃ³n.', 'err');
         return;
       }
 
