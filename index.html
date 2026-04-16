@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro de ubicaciÃ³n</title>
+  <title>Registro de ubicación</title>
   <style>
     :root{
       --bg:#f4f6fb; --card:#ffffff; --text:#1f2937; --line:#dbe2ea;
@@ -41,19 +41,19 @@
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>Registro de ubicaciÃ³n</h1>
+      <h1>Registro de ubicación</h1>
 
       <form id="geoForm">
         <div class="grid">
           <div class="full">
             <label for="ubicacion">Domicilio detectado <span class="req">*</span></label>
-            <input id="ubicacion" name="ubicacion" type="text" placeholder="Se llenarÃ¡ con el domicilio detectado" required />
-            <span class="hint">Puedes corregir el texto si el servicio no devuelve la direcciÃ³n exacta.</span>
+            <input id="ubicacion" name="ubicacion" type="text" placeholder="Se llenará con el domicilio detectado" required />
+            <span class="hint">Puedes corregir el texto si el servicio no devuelve la dirección exacta.</span>
           </div>
 
           <div class="full">
             <label for="referencia">Referencia adicional</label>
-            <input id="referencia" name="referencia" type="text" placeholder="Ejemplo: frente a parque, portÃ³n azul, casa esquina" />
+            <input id="referencia" name="referencia" type="text" placeholder="Ejemplo: frente a parque, portón azul, casa esquina" />
           </div>
 
           <div>
@@ -67,7 +67,7 @@
           </div>
 
           <div>
-            <label for="precision">PrecisiÃ³n estimada (m)</label>
+            <label for="precision">Precisión estimada (m)</label>
             <input id="precision" name="precision" class="readonly" type="text" readonly />
           </div>
 
@@ -78,7 +78,7 @@
         </div>
 
         <div class="actions">
-          <button type="button" class="btn-primary" id="btnUbicacion">Capturar ubicaciÃ³n</button>
+          <button type="button" class="btn-primary" id="btnUbicacion">Capturar ubicación</button>
           <button type="submit" class="btn-secondary" id="btnGuardar">Guardar registro</button>
         </div>
       </form>
@@ -143,11 +143,11 @@
       statusBox.textContent = '';
 
       if (!navigator.geolocation) {
-        setStatus('Este navegador no soporta geolocalizaciÃ³n.', 'err');
+        setStatus('Este navegador no soporta geolocalización.', 'err');
         return;
       }
 
-      setStatus('Obteniendo geoposiciÃ³n...', 'warn');
+      setStatus('Obteniendo geoposición...', 'warn');
 
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -163,26 +163,26 @@
             mapsLink.href = `https://www.google.com/maps?q=${lat},${lng}`;
             mapsLink.style.display = 'inline-block';
 
-            setStatus('GeoposiciÃ³n capturada. Consultando domicilio aproximado...', 'warn');
+            setStatus('Geoposición capturada. Consultando domicilio aproximado...', 'warn');
 
             const domicilio = await reverseGeocode(lat, lng);
             if (domicilio) {
               ubicacion.value = domicilio;
-              setStatus('UbicaciÃ³n detectada correctamente. Revisa el domicilio antes de guardar.', 'ok');
+              setStatus('Ubicación detectada correctamente. Revisa el domicilio antes de guardar.', 'ok');
             } else {
-              setStatus('Se obtuvo la geoposiciÃ³n, pero no se pudo construir una direcciÃ³n visible.', 'warn');
+              setStatus('Se obtuvo la geoposición, pero no se pudo construir una dirección visible.', 'warn');
             }
           } catch (error) {
-            setStatus('Se obtuvo la geoposiciÃ³n, pero no fue posible traer el domicilio. Aun asÃ­ puedes guardar las coordenadas.', 'warn');
+            setStatus('Se obtuvo la geoposición, pero no fue posible traer el domicilio. Aun así puedes guardar las coordenadas.', 'warn');
           }
         },
         (error) => {
           const messages = {
-            1: 'Permiso de ubicaciÃ³n denegado por el usuario.',
-            2: 'No se pudo determinar la ubicaciÃ³n del dispositivo.',
-            3: 'La solicitud de ubicaciÃ³n tardÃ³ demasiado.'
+            1: 'Permiso de ubicación denegado por el usuario.',
+            2: 'No se pudo determinar la ubicación del dispositivo.',
+            3: 'La solicitud de ubicación tardó demasiado.'
           };
-          setStatus(messages[error.code] || 'OcurriÃ³ un error al obtener la ubicaciÃ³n.', 'err');
+          setStatus(messages[error.code] || 'Ocurrió un error al obtener la ubicación.', 'err');
         },
         {
           enableHighAccuracy: true,
@@ -207,7 +207,7 @@
       try {
         result = JSON.parse(raw);
       } catch (e) {
-        result = { ok: false, message: 'Respuesta no vÃ¡lida del servidor.' };
+        result = { ok: false, message: 'Respuesta no válida del servidor.' };
       }
 
       if (!response.ok || !result.ok) {
@@ -232,7 +232,7 @@
       };
 
       if (!data.ubicacion || !data.latitud || !data.longitud) {
-        setStatus('Falta domicilio o capturar la geoposiciÃ³n.', 'err');
+        setStatus('Falta domicilio o capturar la geoposición.', 'err');
         return;
       }
 
