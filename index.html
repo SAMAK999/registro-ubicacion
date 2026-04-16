@@ -3,113 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro de ubicación</title>
+  <title>Registro de ubicaciÃ³n</title>
   <style>
     :root{
-      --bg:#f4f6fb;
-      --card:#ffffff;
-      --text:#1f2937;
-      --line:#dbe2ea;
-      --primary:#2563eb;
-      --primary-2:#1d4ed8;
-      --ok:#0f9d58;
-      --warn:#b45309;
-      --err:#b91c1c;
-      --muted:#64748b;
+      --bg:#f4f6fb; --card:#ffffff; --text:#1f2937; --line:#dbe2ea;
+      --primary:#2563eb; --primary-2:#1d4ed8; --ok:#0f9d58; --warn:#b45309;
+      --err:#b91c1c; --muted:#64748b;
     }
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      background:linear-gradient(180deg,#eef2ff 0%, var(--bg) 100%);
-      color:var(--text);
-      padding:24px;
-    }
-    .wrap{max-width:860px; margin:0 auto;}
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:24px;
-      box-shadow:0 12px 40px rgba(17,24,39,.08);
-    }
-    h1{margin:0 0 8px; font-size:30px;}
-    .sub{margin:0 0 22px; color:#475569; line-height:1.45;}
-    .grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#eef2ff 0%,var(--bg) 100%);color:var(--text);padding:24px;}
+    .wrap{max-width:860px;margin:0 auto;}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 12px 40px rgba(17,24,39,.08);}
+    h1{margin:0 0 8px;font-size:30px;}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
     .full{grid-column:1 / -1}
-    label{display:block; font-size:14px; font-weight:700; margin-bottom:8px;}
+    label{display:block;font-size:14px;font-weight:700;margin-bottom:8px;}
     .req{color:#dc2626}
-    .hint{display:block; margin-top:6px; color:var(--muted); font-size:12px; line-height:1.35;}
-    input{
-      width:100%;
-      border:1px solid #cfd8e3;
-      background:#fff;
-      border-radius:12px;
-      padding:13px 14px;
-      font-size:15px;
-      color:var(--text);
-      outline:none;
-    }
-    input:focus{
-      border-color:var(--primary);
-      box-shadow:0 0 0 3px rgba(37,99,235,.12);
-    }
+    .hint{display:block;margin-top:6px;color:var(--muted);font-size:12px;line-height:1.35;}
+    input{width:100%;border:1px solid #cfd8e3;background:#fff;border-radius:12px;padding:13px 14px;font-size:15px;color:var(--text);outline:none;}
+    input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
     .readonly{background:#f8fafc}
-    .actions{display:flex; flex-wrap:wrap; gap:12px; margin-top:18px;}
-    button{
-      border:none;
-      border-radius:12px;
-      padding:13px 16px;
-      font-size:15px;
-      font-weight:700;
-      cursor:pointer;
-    }
-    .btn-primary{background:var(--primary); color:#fff}
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px;}
+    button{border:none;border-radius:12px;padding:13px 16px;font-size:15px;font-weight:700;cursor:pointer;}
+    .btn-primary{background:var(--primary);color:#fff}
     .btn-primary:hover{background:var(--primary-2)}
-    .btn-secondary{background:#eef2ff; color:#1e40af}
-    .btn-secondary:disabled, .btn-primary:disabled{opacity:.7; cursor:not-allowed}
-    .status{
-      margin-top:18px;
-      padding:14px 16px;
-      border-radius:12px;
-      font-size:14px;
-      display:none;
-      border:1px solid var(--line);
-      line-height:1.45;
-    }
-    .status.ok{display:block; color:var(--ok); background:#f0fdf4; border-color:#bbf7d0;}
-    .status.warn{display:block; color:var(--warn); background:#fffbeb; border-color:#fde68a;}
-    .status.err{display:block; color:var(--err); background:#fef2f2; border-color:#fecaca;}
-    .extra-links{display:flex; flex-wrap:wrap; gap:12px; margin-top:12px;}
-    .maps-link{
-      display:none;
-      font-size:14px;
-      text-decoration:none;
-      color:#1d4ed8;
-      font-weight:700;
-    }
-    @media (max-width:720px){
-      .grid{grid-template-columns:1fr}
-    }
+    .btn-secondary{background:#eef2ff;color:#1e40af}
+    .btn-secondary:disabled,.btn-primary:disabled{opacity:.7;cursor:not-allowed}
+    .status{margin-top:18px;padding:14px 16px;border-radius:12px;font-size:14px;display:none;border:1px solid var(--line);line-height:1.45;}
+    .status.ok{display:block;color:var(--ok);background:#f0fdf4;border-color:#bbf7d0;}
+    .status.warn{display:block;color:var(--warn);background:#fffbeb;border-color:#fde68a;}
+    .status.err{display:block;color:var(--err);background:#fef2f2;border-color:#fecaca;}
+    .extra-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;}
+    .maps-link{display:none;font-size:14px;text-decoration:none;color:#1d4ed8;font-weight:700;}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>Registro de ubicación</h1>
-      <p class="sub">Captura la ubicación actual, valida el domicilio detectado y guarda el registro en Google Sheets.</p>
+      <h1>Registro de ubicaciÃ³n</h1>
 
       <form id="geoForm">
         <div class="grid">
           <div class="full">
             <label for="ubicacion">Domicilio detectado <span class="req">*</span></label>
-            <input id="ubicacion" name="ubicacion" type="text" placeholder="Se llenará con el domicilio detectado" required />
-            <span class="hint">Puedes corregir el texto si el servicio no devuelve la dirección exacta.</span>
+            <input id="ubicacion" name="ubicacion" type="text" placeholder="Se llenarÃ¡ con el domicilio detectado" required />
+            <span class="hint">Puedes corregir el texto si el servicio no devuelve la direcciÃ³n exacta.</span>
           </div>
 
           <div class="full">
             <label for="referencia">Referencia adicional</label>
-            <input id="referencia" name="referencia" type="text" placeholder="Ejemplo: frente a parque, portón azul, casa esquina" />
+            <input id="referencia" name="referencia" type="text" placeholder="Ejemplo: frente a parque, portÃ³n azul, casa esquina" />
           </div>
 
           <div>
@@ -123,7 +67,7 @@
           </div>
 
           <div>
-            <label for="precision">Precisión estimada (m)</label>
+            <label for="precision">PrecisiÃ³n estimada (m)</label>
             <input id="precision" name="precision" class="readonly" type="text" readonly />
           </div>
 
@@ -134,7 +78,7 @@
         </div>
 
         <div class="actions">
-          <button type="button" class="btn-primary" id="btnUbicacion">Capturar ubicación</button>
+          <button type="button" class="btn-primary" id="btnUbicacion">Capturar ubicaciÃ³n</button>
           <button type="submit" class="btn-secondary" id="btnGuardar">Guardar registro</button>
         </div>
       </form>
@@ -187,9 +131,7 @@
         headers: { 'Accept': 'application/json' }
       });
 
-      if (!response.ok) {
-        throw new Error('No fue posible consultar el servicio de domicilio.');
-      }
+      if (!response.ok) throw new Error('No fue posible consultar el servicio de domicilio.');
 
       const data = await response.json();
       return data.display_name || '';
@@ -201,11 +143,11 @@
       statusBox.textContent = '';
 
       if (!navigator.geolocation) {
-        setStatus('Este navegador no soporta geolocalización.', 'err');
+        setStatus('Este navegador no soporta geolocalizaciÃ³n.', 'err');
         return;
       }
 
-      setStatus('Obteniendo geoposición...', 'warn');
+      setStatus('Obteniendo geoposiciÃ³n...', 'warn');
 
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -221,26 +163,26 @@
             mapsLink.href = `https://www.google.com/maps?q=${lat},${lng}`;
             mapsLink.style.display = 'inline-block';
 
-            setStatus('Geoposición capturada. Consultando domicilio aproximado...', 'warn');
+            setStatus('GeoposiciÃ³n capturada. Consultando domicilio aproximado...', 'warn');
 
             const domicilio = await reverseGeocode(lat, lng);
             if (domicilio) {
               ubicacion.value = domicilio;
-              setStatus('Ubicación detectada correctamente. Revisa el domicilio antes de guardar.', 'ok');
+              setStatus('UbicaciÃ³n detectada correctamente. Revisa el domicilio antes de guardar.', 'ok');
             } else {
-              setStatus('Se obtuvo la geoposición, pero no se pudo construir una dirección visible.', 'warn');
+              setStatus('Se obtuvo la geoposiciÃ³n, pero no se pudo construir una direcciÃ³n visible.', 'warn');
             }
           } catch (error) {
-            setStatus('Se obtuvo la geoposición, pero no fue posible traer el domicilio. Aun así puedes guardar las coordenadas.', 'warn');
+            setStatus('Se obtuvo la geoposiciÃ³n, pero no fue posible traer el domicilio. Aun asÃ­ puedes guardar las coordenadas.', 'warn');
           }
         },
         (error) => {
           const messages = {
-            1: 'Permiso de ubicación denegado por el usuario.',
-            2: 'No se pudo determinar la ubicación del dispositivo.',
-            3: 'La solicitud de ubicación tardó demasiado.'
+            1: 'Permiso de ubicaciÃ³n denegado por el usuario.',
+            2: 'No se pudo determinar la ubicaciÃ³n del dispositivo.',
+            3: 'La solicitud de ubicaciÃ³n tardÃ³ demasiado.'
           };
-          setStatus(messages[error.code] || 'Ocurrió un error al obtener la ubicación.', 'err');
+          setStatus(messages[error.code] || 'OcurriÃ³ un error al obtener la ubicaciÃ³n.', 'err');
         },
         {
           enableHighAccuracy: true,
@@ -265,7 +207,7 @@
       try {
         result = JSON.parse(raw);
       } catch (e) {
-        result = { ok: false, message: 'Respuesta no válida del servidor.' };
+        result = { ok: false, message: 'Respuesta no vÃ¡lida del servidor.' };
       }
 
       if (!response.ok || !result.ok) {
@@ -290,7 +232,7 @@
       };
 
       if (!data.ubicacion || !data.latitud || !data.longitud) {
-        setStatus('Falta domicilio o capturar la geoposición.', 'err');
+        setStatus('Falta domicilio o capturar la geoposiciÃ³n.', 'err');
         return;
       }
 
