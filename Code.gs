@@ -28,7 +28,7 @@ function doPost(e) {
 
     return jsonOutput_({
       ok: true,
-      message: 'Registro guardado correctamente en Google Sheets.'
+      message: 'Registro guardado correctamente.'
     });
   } catch (error) {
     return jsonOutput_({
